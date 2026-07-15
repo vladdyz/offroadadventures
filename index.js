@@ -69,7 +69,7 @@ const store = MongoStore.create({
     mongoUrl: dbUrl,
     touchAfter: 24 * 60 * 60,
     crypto: {
-        secret: 'thisshouldbeabettersecret!'
+        secret: process.env.SESSION_SECRET
     }
 });
 
@@ -92,7 +92,7 @@ app.use(express.static(path.join(__dirname, 'public'))); //serving static assets
 const sessionConfig = {
     store, //use Mongo to store session information
     //name: 'cretaceousCapybaraCartwheeel', //instead of using the default name of connect.sid, make it more difficult to extract session info for any attackers
-    secret: 'thisshouldbeabettersecret!',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -193,17 +193,19 @@ app.use('/', users); //all the register/login auth routes are localized into rou
 
 
 
-//CSS stuff for the EJS engine
 
-
-app.listen(3000, () => {
-    console.log("Listening on port 3000");
-})
-
+app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+});
 
 app.get('/', (req, res) => {
     res.render("home")
 })
+
+// for Render deployment
+app.get('/health', (req,res)=>{
+    res.status(200).json({status:'ok'});
+});
 
 
 
