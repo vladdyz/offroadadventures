@@ -63,6 +63,10 @@ Deployment:
 - Render
 - MongoDB Atlas
 
+## Environment Variables
+
+See `.env.example`
+
 ## Deployment
 
 The application is deployed using:
@@ -71,6 +75,13 @@ The application is deployed using:
 - MongoDB Atlas (database hosting)
 - Cloudinary (image storage)
 
-## Environment Variables
 
-See `.env.example`
+## Future Improvements
+
+Potential future enhancements:
+- Replace generated seed data with a real campground dataset or API
+- Add user profile pages
+- Add campground search and filtering
+- Add pagination for campground listings
+- Add automated test coverage and support for CI/CD
+- Improve mobile-first UI design
