@@ -91,7 +91,6 @@ app.use(methodOverride('_method')) //method-override is used throughout the app 
 app.use(express.static(path.join(__dirname, 'public'))); //serving static assets (images, scripts, etc) from the project public directory
 const sessionConfig = {
     store, //use Mongo to store session information
-    //name: 'cretaceousCapybaraCartwheeel', //instead of using the default name of connect.sid, make it more difficult to extract session info for any attackers
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
@@ -105,7 +104,6 @@ const sessionConfig = {
 };
 app.use(session(sessionConfig));
 app.use(flash());
-//app.use(helmet());
 //Acceptable sources for the configured content security policy for Helmet
 const scriptSrcUrls = [
     "https://stackpath.bootstrapcdn.com/",
