@@ -14,6 +14,7 @@ Additional listings may be created by authenticated users to demonstrate the ful
 
 This project demonstrates a full-stack location-based review platform architecture. The underlying design can be adapted to support other location-based domains such as restaurants, hotels, museums, heritage sites, or attractions.
 
+
 ## Features & Technical Highlights
 
 - Full authentication system using Passport.js and passport-local-mongoose
@@ -65,6 +66,12 @@ Authentication:
 Deployment:
 - Render
 - MongoDB Atlas
+
+## Project History
+
+Originally developed in 2024 as a full-stack web development project, this application was revisited and enhanced with additional improvements including deployment configuration, environment variable management, authentication fixes, planned testing infrastructure, and production deployment.
+
+The project is currently deployed and maintained as a portfolio demonstration.
 
 ## Environment Variables
 
