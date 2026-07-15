@@ -1,6 +1,9 @@
 # OFFROAD ADVENTURES
 
-![GIF of Offroad Adventures UI](https://github.com/vladdyz/offroadadventures/blob/main/images/offroadadventure.gif)
+![Deployment](https://img.shields.io/badge/deployed-Render-success)
+![Database](https://img.shields.io/badge/database-MongoDB-green)
+![Framework](https://img.shields.io/badge/framework-Express-blue)
+
 
 
 A full-stack campground review application built with Node.js, Express, MongoDB, and EJS.
@@ -13,6 +16,13 @@ The included campground listings are generated seed data and are not intended to
 Additional listings may be created by authenticated users to demonstrate the full CRUD workflow.
 
 This project demonstrates a full-stack location-based review platform architecture. The underlying design can be adapted to support other location-based domains such as restaurants, hotels, museums, heritage sites, or attractions.
+
+
+Live Demo at: https://offroadadventures.onrender.com/ (may take a few seconds to boot up!)
+
+## Preview
+
+![GIF of Offroad Adventures UI](https://github.com/vladdyz/offroadadventures/blob/main/images/offroadadventure.gif)
 
 
 ## Features & Technical Highlights
@@ -84,8 +94,6 @@ The application is deployed using:
 - Render (Node.js application hosting)
 - MongoDB Atlas (database hosting)
 - Cloudinary (image storage)
-
-Live Demo at: https://offroadadventures.onrender.com/ (may take a few seconds to boot up!)
 
 
 ## Future Improvements
