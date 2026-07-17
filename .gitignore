@@ -25,6 +25,7 @@ Thumbs.db
 coverage/
 dist/
 build/
+*.lcov
 
 # Temporary files
 tmp/
