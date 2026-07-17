@@ -1,3 +1,13 @@
+// avoid making real maptiler API calls (especially since the api key is excluded from CI)
+jest.mock('@maptiler/client', () => ({
+    config: {},
+    geocoding: {
+        forward: jest.fn().mockResolvedValue({
+            features: [{ geometry: { type: 'Point', coordinates: [-79.3832, 43.6532] } }]
+        })
+    }
+}));
+
 const request = require('supertest');
 const app = require('../../index');
 const mongoose = require('mongoose');
@@ -6,8 +16,6 @@ const Review = require('../../models/review');
 const Campground = require('../../models/campground');
 
 
-
-//1. Unauthenticated user should not be able to post reviews
 describe('Review routes', () => {
 
     test('Unauthenticated users cannot post a review', async () => {
