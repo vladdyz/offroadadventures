@@ -12,6 +12,6 @@ const UserSchema = new Schema({
 });
 UserSchema.plugin(passportLocalMongoose, {
     usernameField: 'userName'
-}); //adds on to the Schema a username and password
+}); // the NoSQL database uses the camelCase spelling of this which the schema should reflect
 
 module.exports = mongoose.model('User', UserSchema);

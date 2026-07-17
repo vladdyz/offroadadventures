@@ -7,6 +7,12 @@ const Review = require('../models/review');
 module.exports.createReview = async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     const review = new Review(req.body.review);
+    // safety check incase a user bypasses the UI and attempts to post a review for a nonexistent campground
+    if (!campground) {
+        req.flash('error', 'Campground not found');
+        return res.redirect('/campgrounds');
+    }
+
     review.author = req.user._id; //assigns each new review object an author property corresponding to the value of the currently signed-in user (same as campground post route)
     campground.reviews.push(review);
     await review.save();
@@ -17,7 +23,7 @@ module.exports.createReview = async (req, res) => {
 
 module.exports.destroy = async (req, res) => {
     const { id, reviewId} = req.params; //Destructuring the values from params into variables (to avoid using req.params prefix below)
-    Campground.findByIdAndUpdate(id, {$pull: { reviews: reviewId }}); //remove the reference from the campground to the reviewId we wish to delete, by pulling it from the array
+    await Campground.findByIdAndUpdate(id, {$pull: { reviews: reviewId }}); //remove the reference from the campground to the reviewId we wish to delete, by pulling it from the array
     await Review.findByIdAndDelete(reviewId); //delete the review
     req.flash('success', 'Successfully removed your review!');
     res.redirect(`/campgrounds/${id}`);

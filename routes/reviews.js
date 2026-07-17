@@ -15,7 +15,7 @@ const reviews = require('../controllers/reviews')
 router.post('/', isLoggedIn, validateReview, catchAsync (reviews.createReview));
 
 //Route to delete a review from a specific campsite, using the unique _id PKs for both the campsite and selected review
-router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(reviews.destroy));
+router.delete('/:reviewId', isLoggedIn, catchAsync(isReviewAuthor), catchAsync(reviews.destroy));
 
 
 module.exports = router; //exports the router and its saved routes from above

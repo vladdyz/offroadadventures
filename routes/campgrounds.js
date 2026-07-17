@@ -38,13 +38,13 @@ router.route('/:id')
     //Route to display information for a specific campsite using its primary key (_id) in the params
     .get(catchAsync(campgrounds.showCampground))
     //Route to update the selected campground using the information submitted in the /edit page above, with built-in client and server side validation middleware
-    .put(isLoggedIn, isAuthor, upload.array('image'), validateCampground, catchAsync(campgrounds.updateCampground)) 
+    .put(isLoggedIn, catchAsync(isAuthor), upload.array('image'), validateCampground, catchAsync(campgrounds.updateCampground)) 
     //Route to delete a specific campground identified by its unique _id value as the params
-    .delete(isLoggedIn, isAuthor, catchAsync(campgrounds.destroy));
+    .delete(isLoggedIn, catchAsync(isAuthor), catchAsync(campgrounds.destroy));
 
 
 //Building on the route above, an extension to modify the information for a selected campground, rendering the edit page
-router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(campgrounds.editForm));
+router.get('/:id/edit', isLoggedIn, catchAsync(isAuthor), catchAsync(campgrounds.editForm));
 
 
 

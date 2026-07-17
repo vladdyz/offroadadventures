@@ -39,7 +39,7 @@ const seedDB = async() => {
         //Pick a random city out of the 1000 cities in cities.js and a random name using the descriptors from the arrays in seedHelper
         const price = Math.floor(Math.random() * 30) + 10
         const camp = new Campground({
-            author: '664c15f61f4ebf6fbb683d0f', //each campground references a unique obhectId as its author, the initial db is populated by campgrounds with my own user id. Locally this would be '669ec03ddc6d1b1704620d3a' instead
+            author: '6a58625a642bae3f87343d32', //each campground references a unique obhectId as its author, the initial db is populated by campgrounds with my own user id. Locally this would be '669ec03ddc6d1b1704620d3a' instead
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
             title: `${sample(descriptors)} ${sample(places)}`,
             images: [

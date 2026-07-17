@@ -22,10 +22,17 @@ module.exports.storeReturnTo = (req, res, next) => {
     next();
 }
 
+// Note: Both of the following author middleware differ in that they are async functions, therefore when invoked need to be wrapped in catchAsync
+
 //Extra back-end security middleware to protect any unauthorized CRUD requests from being sent to certain routes via Postman, bypassing the front-end security
 module.exports.isAuthor = async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findById(id);
+    // additional safety for delete requests to nonexisting campgrounds not to throw any errors
+     if (!campground) {
+        req.flash('error','Campground not found!');
+        return res.redirect('/campgrounds');
+    }
     if (!campground.author.equals(req.user._id)) {
         req.flash('error', 'You do not have permission to do that!');
         return res.redirect(`/campgrounds/${id}`);
@@ -36,6 +43,11 @@ module.exports.isAuthor = async (req, res, next) => {
 module.exports.isReviewAuthor = async (req, res, next) => {
     const { id, reviewId } = req.params;
     const review = await Review.findById(reviewId);
+    // extra safety if the review disappeared for some reason
+    if (!review) {
+        req.flash('error', 'Review not found!');
+        return res.redirect(`/campgrounds/${id}`);
+    }
     if (!review.author.equals(req.user._id)) {
         req.flash('error', 'You do not have permission to do that!');
         return res.redirect(`/campgrounds/${id}`);

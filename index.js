@@ -1,14 +1,9 @@
-//While this app is still in development, require the dotenv package to access the private environmental variables
-//In production (when this app is deployed) this will be unneccessary as these are stored elsewhere
-if(process.env.NODE_ENV !== "production") {
-    require('dotenv').config();
-}
+
 
 const express = require('express');
 const app = express();
 const path = require('path');
-const mongoose = require('mongoose');
-const port = process.env.PORT || 3080
+
 const Campground = require('./models/campground');
 const methodOverride = require('method-override'); //Masquerade PUT/GET/POST etc. requests as something else
 const ejsMate = require('ejs-mate'); //Layout and partial template stuff for EJS templates to break up our page components into small modules
@@ -30,6 +25,7 @@ process.noDeprecation = true; //To ignore DEP0044: "The `util.isArray` API is de
 //This is to fix potential security issues if the user tries to inject any of the form fields with a query string (ex: search {"$gt": ""} as a username) to try to manipulate the 
 //tables in a way that they are not authorized to do so. Any special characters such as "$" or "." should not be permitted into these fields. This is what this module is for.
 const mongoSanitize = require('express-mongo-sanitize');
+app.use(express.urlencoded({extended: true}));
 app.use(mongoSanitize());
 
 /*
@@ -40,44 +36,22 @@ app.use(mongoSanitize({
 
 */
 
-/* For Development Testing */
-/* mongoose.connect('mongodb://localhost:27017/yelp-camp', {
-    //These options are deprecated!
-    //useNewUrlParser: true,
-    //useCreateIndex: true, 
-    //useUnifiedTopology: true
-})  */
 
-/* For Production */ 
-mongoose.connect(dbUrl, {
-    //These options are deprecated!
-    //useNewUrlParser: true,
-    //useCreateIndex: true, 
-    //useUnifiedTopology: true
-})
+let store;
+if (process.env.NODE_ENV !== 'test') {
+    store = MongoStore.create({
+        mongoUrl: dbUrl,
+        touchAfter: 24 * 60 * 60,
+        crypto: {
+            secret: process.env.SESSION_SECRET
+        }
+    });
 
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", ()=> {
-    console.log("Database connected")
-});
-const yelpdb = db.useDb('yelp');
+    store.on("error", function(e) {
+        console.log("There was an error with the Mongo session store: ", e)
+    })
 
-
-
-const store = MongoStore.create({
-    mongoUrl: dbUrl,
-    touchAfter: 24 * 60 * 60,
-    crypto: {
-        secret: process.env.SESSION_SECRET
-    }
-});
-
-store.on("error", function(e) {
-    console.log("There was an error with the Mongo session store: ", e)
-})
-
-
+}
 
 
 app.engine('ejs', ejsMate);
@@ -85,7 +59,7 @@ app.set('view engine', 'ejs');;
 app.set('views', path.join(__dirname, 'views'));
 
 
-app.use(express.urlencoded({extended: true}));
+
 app.use(methodOverride('_method')) //method-override is used throughout the app in forms to mimic put/delete requests instead of POST, so we can perform CRUD operations on the data
 //An example would be the put/delete routes below accessible through forms within the ejs pages that add a query string to the route, indicating the request type
 app.use(express.static(path.join(__dirname, 'public'))); //serving static assets (images, scripts, etc) from the project public directory
@@ -190,12 +164,6 @@ app.use('/', users); //all the register/login auth routes are localized into rou
 
 
 
-
-
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
-});
-
 app.get('/', (req, res) => {
     res.render("home")
 })
@@ -214,7 +182,10 @@ app.all('*', (req, res, next) => {
 
 //Error catching middleware for any unexpected errors during the routes
 app.use((err, req, res, next) => {
+    //console.error(err)
     const { statusCode = 500 } = err;
     if (!err.message) err.message = 'Oh No, Something Went Wrong!'
     res.status(statusCode).render('error', { err })
 })
+
+module.exports = app;
