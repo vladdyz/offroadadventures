@@ -3,7 +3,7 @@
 ![Deployment](https://img.shields.io/badge/deployed-Render-success)
 ![Database](https://img.shields.io/badge/database-MongoDB-green)
 ![Framework](https://img.shields.io/badge/framework-Express-blue)
-[![CI](https://github.com/<you>/<repo>/actions/workflows/ci.yml/badge.svg)](https://github.com/vladdyz/offroadadventures/actions/workflows/ci.yml)
+[![CI](https://github.com/vladdyz/offroadadventures/actions/workflows/ci.yml/badge.svg)](https://github.com/vladdyz/offroadadventures/actions/workflows/ci.yml)
 
 
 
