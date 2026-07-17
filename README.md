@@ -3,6 +3,7 @@
 ![Deployment](https://img.shields.io/badge/deployed-Render-success)
 ![Database](https://img.shields.io/badge/database-MongoDB-green)
 ![Framework](https://img.shields.io/badge/framework-Express-blue)
+[![CI](https://github.com/<you>/<repo>/actions/workflows/ci.yml/badge.svg)](https://github.com/<you>/<repo>/actions/workflows/ci.yml)
 
 
 
@@ -79,9 +80,27 @@ Deployment:
 
 ## Project History
 
-Originally developed in 2024 as a full-stack web development project, this application was revisited and enhanced with additional improvements including deployment configuration, environment variable management, authentication fixes, planned testing infrastructure, and production deployment.
+Originally developed in 2024 as a full-stack web development project, this application was revisited and enhanced with additional improvements including deployment configuration, environment variable management, authentication fixes, testing infrastructure, and production deployment.
+
+During development, a misconfiguration had been diagnosed and resolved regarding the test suite potentially connecting to the prod database instead of the in-memory instance. The app code and entrypoint was substantially refactored with isolating safeguards put in place to guarantee that test runs cannot reach prod data, one of which being the assertSafeToWipe() guard ensuring that data on the cloud cannot be cleared. 
 
 The project is currently deployed and maintained as a portfolio demonstration.
+
+## Testing
+
+An automated test suite using Jest, Supertest, and MongoDB-Memory-Server is configured to cover authentication, authorization, CRUD operations for managing/updating/reviewing location-based data, and includes edge cases like malformed ID values, cross-user auth attempts and validation failures. 
+
+The configuration is as follows:
+- 36+ tests across unit and integration suites
+- All tests run against an in-memory MongoDB instance which is fully isolated from prod
+- CI runs this suite in its entirety on every push/PR via GitHub actions
+- To run this locally, use the following commands:
+\`\`\`bash
+npm test              # run the suite
+npm run test:coverage # generate a coverage report
+\`\`\`
+
+
 
 ## Environment Variables
 
@@ -100,8 +119,8 @@ The application is deployed using:
 
 Potential future enhancements:
 - Replace generated seed data with a real campground dataset or API
-- Add user profile pages
+- Add user profile pages with ratings history
 - Add campground search and filtering
 - Add pagination for campground listings
-- Add automated test coverage and support for CI/CD
+- Add automated test coverage and support for CI/CD [✓]
 - Improve mobile-first UI design

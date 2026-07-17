@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest -c jest.config.js --runInBand",
+    "test:coverage": "jest --coverage",
     "start": "node server.js"
   },
   "author": "Vladislav Zolotukhin",
