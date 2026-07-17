@@ -10,7 +10,7 @@
 A full-stack campground review application built with Node.js, Express, MongoDB, and EJS.
 
 The included campground listings are generated seed data and are not intended to represent real businesses or locations. Seeded entries use randomized:
-- campground names
+- names
 - images
 - geographic coordinates within the United States
 
