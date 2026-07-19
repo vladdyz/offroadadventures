@@ -4,12 +4,6 @@ const { cloudinary } = require("../cloudinary");
 const maptilerClient = require("@maptiler/client");
 maptilerClient.config.apiKey = process.env.MAPTILER_API_KEY;
 
-
-module.exports.index = async (req, res) => {
-    const campgrounds = await Campground.find({});
-    res.render('campgrounds/index', { campgrounds })
-}
-
 module.exports.newForm = (req, res) => {
     res.render('campgrounds/new');
 }
@@ -87,4 +81,34 @@ module.exports.destroy = async (req, res) => {
     await Campground.findByIdAndDelete(id);
     req.flash('success', 'Successfully deleted campground!');
     res.redirect('/campgrounds');
+}
+
+// added pagination support
+module.exports.index = async (req, res, next) => {
+    const limit = Math.min(parseInt(req.query.limit) || 10, 100); // cap that prevents ?limit=99999 from dumping the whole DB
+    const page = Math.max(parseInt(req.query.page) || 1, 1);
+    const skip = (page - 1) * limit;
+
+    const [campgrounds, totalCount] = await Promise.all([
+        Campground.find({}).skip(skip).limit(limit),
+        Campground.countDocuments({})
+    ]);
+    const hasMore = skip + campgrounds.length < totalCount;
+
+    // Infinite-scroll requests explicitly ask for JSON (see infiniteScroll.js).
+    // We render just the new batch of cards as an HTML fragment and wrap it in
+    // JSON — this keeps the card markup defined in exactly one place (the EJS
+    // partial below) instead of duplicating it in client-side JS.
+    if (req.accepts(['html', 'json']) === 'json') {
+        return res.render('partials/card', { campgrounds }, (err, html) => {
+            // because res.render's callback form is NOT a promise and fires after this function has already returned
+            // the catchAsync's catch(next) cant see an error thrown in here so explicitly forward it to next()
+            if (err) return next(err);
+            res.json({ html, hasMore, page });
+        });
+    }
+
+    // map always gets every campground location separate from the pagination
+    const mapData = await Campground.find({});
+    res.render('campgrounds/index', { campgrounds, mapData, hasMore, page, limit });
 }

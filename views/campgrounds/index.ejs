@@ -3,35 +3,30 @@
 <%# For displaying the cluster map %>
 <div id="cluster-map"></div>
 
-<h1>All Campgrounds</h1>
-<div>
-    <a href="/campgrounds/new">Add Campground</a>
-</div>
-<% for (let campground of campgrounds){%>
-<div class="card mb-3">
-    <div class="row">
-        <div class="col-md-4">
-            <% if (campground.images.length) { %>
-            <img crossorigin="anonymous" class="img-fluid" alt="" src="<%=campground.images[0].url%>">
-            <% } else { %>
-                <%# If no image is provided for a campground, this is the default image %>
-                <img crossorigin="anonymous" class="img-fluid" alt="" src="https://res.cloudinary.com/dnfeatqhz/image/upload/v1721770047/CampgroundsApp/snwpbkd8ev8iig2niuv0.jpg">
-            <% } %>
-
+<div class="d-flex justify-content-between align-items-center flex-wrap mb-3 mt-3">
+    <h1 class="mb-0">All Campgrounds</h1>
+    <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center">
+            <label for="pageSizeSelect" class="me-2 mb-0">Load:</label>
+            <select id="pageSizeSelect" class="form-select form-select-sm" style="width:auto;">
+                <option value="5" <%= limit === 5 ? 'selected' : '' %>>5</option>
+                <option value="10" <%= limit === 10 ? 'selected' : '' %>>10</option>
+                <option value="25" <%= limit === 25 ? 'selected' : '' %>>25</option>
+                <option value="50" <%= limit === 50 ? 'selected' : '' %>>50</option>
+            </select>
         </div>
-        <div class="col-md-8">
-            <div class="card-body">
-                <h5 class="card-title"><%= campground.title %> </h5>
-                <p class="card-text"><%= campground.description %></p>
-                <p class="card-text">
-                    <small class="text-muted"><%= campground.location%></small>
-                </p>
-                <a class="btn btn-primary" href="/campgrounds/<%=campground._id%>">View <%=campground.title%></a>
-            </div>
-        </div>
+        <a class="btn btn-success" href="/campgrounds/new">Add Campground</a>
     </div>
 </div>
-<% }%>
+
+<div id="campground-list">
+    <%- include('../partials/card', { campgrounds }) %>
+</div>
+
+<div id="scroll-sentinel"></div>
+<div id="loading-indicator" class="text-center my-3" style="display:none;">
+    <div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
+</div>
 
 <%# Creating a cluster map on the index page using all of the coordinates from the database %>
 
@@ -39,9 +34,17 @@
     //EJS can't be placed within JS files and are included here before the script below gets called
     //This is also to centralize the api key variable from the .env file as it's reused in several places, making it easier to update
     const maptilerApiKey = '<%- process.env.MAPTILER_API_KEY %>';
-    const campgrounds = { features: <%- JSON.stringify(campgrounds) %>}
+    const campgrounds = { features: <%- JSON.stringify(mapData) %>}
+    window.paginationState = {
+        page: <%- page %>,
+        hasMore: <%- hasMore %>,
+        limit: <%- limit %>
+    };
 </script>
 
 <script src="/clusterMap.js">
     //The code for the cluster map being rendered on the index page
+</script>
+<script src="/infiniteScroll.js">
+    //Pagination support 
 </script>

@@ -75,3 +75,12 @@ module.exports.populateCampgrounds = async (user) => {
 
     return campgrounds;
 };
+
+// used to test exact amounts of campgrounds for pagination
+module.exports.seedCampgrounds = async (user, count) => {
+    const campgrounds = [];
+    for (let i = 0; i < count; i++) {
+        campgrounds.push(await module.exports.createTestCampground(user));
+    }
+    return campgrounds;
+};

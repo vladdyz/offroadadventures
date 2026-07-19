@@ -91,7 +91,7 @@ The project is currently deployed and maintained as a portfolio demonstration.
 An automated test suite using Jest, Supertest, and MongoDB-Memory-Server is configured to cover authentication, authorization, CRUD operations for managing/updating/reviewing location-based data, and includes edge cases like malformed ID values, cross-user auth attempts and validation failures. 
 
 The configuration is as follows:
-- 36+ tests across unit and integration suites
+- 42+ tests across unit and integration suites
 - All tests run against an in-memory MongoDB instance which is fully isolated from prod
 - CI runs this suite in its entirety on every push/PR via GitHub actions
 - To run this locally, use the following commands:
@@ -121,6 +121,6 @@ Potential future enhancements:
 - Replace generated seed data with a real campground dataset or API
 - Add user profile pages with ratings history
 - Add campground search and filtering
-- Add pagination for campground listings
+- Add pagination for campground listings [✓]
 - Add automated test coverage and support for CI/CD [✓]
 - Improve mobile-first UI design
