@@ -1,6 +1,6 @@
 {
   "name": "Offroad Adventures",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "private": true,
   "description": "A full stack location based review platform built using node, express, mongo and ejs templates. Users can create, review, and manage location-based listings with authentication, image uploads, and interactive maps",
   "main": "index.js",
